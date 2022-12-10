@@ -1,0 +1,34 @@
+<data>
+	<account>
+		<name>google1</name>
+		<website>google.com</website>
+		<login>a</login>
+		<login>b</login>
+		<login>c</login>
+		<password>p</password>
+		<optional>
+			<name>opt1</name>
+			<info>opt1 info</info>
+		</optional>
+		<optional>
+			<name>opt2</name>
+			<info>opt2 info</info>
+		</optional>
+	</account>
+	<account>
+		<name>google18</name>
+		<website>google.com</website>
+		<login>a</login>
+		<login>b</login>
+		<login>c</login>
+		<password>p</password>
+		<optional>
+			<name>opt1</name>
+			<info>opt1 info</info>
+		</optional>
+		<optional>
+			<name>opt2</name>
+			<info>opt2 info</info>
+		</optional>
+	</account>	
+</data>
