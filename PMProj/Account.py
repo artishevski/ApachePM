@@ -2,13 +2,9 @@ class Account:
     def __init__(self, name, website, login, password, optional):
         self.name = name
         self.website = website
-        self.login = list()
-        for i in login:
-            self.login.append(i)
+        self.login = login
         self.password = password
-        self.optional = dict()
-        for key, val in optional:
-            self.optional.update({key: val})
+        self.optional = optional
 
     def get_info(self):
         print("name: ", str(self.name))

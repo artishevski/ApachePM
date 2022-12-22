@@ -8,12 +8,18 @@ def readFromXml():
     root = tree.getroot()
     data = list()
     for account in root:
-        name = account[0].text
-        website = account[1].text
-        login = account[2].text
-        password = account[3].text
+        login = []
         opt = dict()
-        for optional in account[4]:
-            opt.update({optional[0].text: optional[1].text})
-        data.append(Account(name, website, [login], password, opt))
+        for account_info in account:
+            if account_info.tag == 'name':
+                name = account_info.text
+            elif account_info.tag == 'website':
+                website = account_info.text
+            elif account_info.tag == 'login':
+                login.append(account_info.text)
+            elif account_info.tag == 'password':
+                password = account_info.text
+            else:
+                opt.update({account_info.tag: account_info.text})
+        data.append(Account(name, website, login, password, opt))
     return data
