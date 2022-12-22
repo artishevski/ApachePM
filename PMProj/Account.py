@@ -1,6 +1,7 @@
 class Account:
-    def __init__(self, name, website, login, password, optional):
+    def __init__(self, name, extra_info, website, login, password, optional):
         self.name = name
+        self.extra_info = extra_info
         self.website = website
         self.login = login
         self.password = password

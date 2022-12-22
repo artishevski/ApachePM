@@ -10,9 +10,13 @@ def readFromXml():
     for account in root:
         login = []
         opt = dict()
+        name = website = password = ''
+        extra_info = None
         for account_info in account:
             if account_info.tag == 'name':
                 name = account_info.text
+            if account_info.tag == 'extra_info':
+                extra_info = account_info.text
             elif account_info.tag == 'website':
                 website = account_info.text
             elif account_info.tag == 'login':
@@ -21,5 +25,5 @@ def readFromXml():
                 password = account_info.text
             else:
                 opt.update({account_info.tag: account_info.text})
-        data.append(Account(name, website, login, password, opt))
+        data.append(Account(name, extra_info, website, login, password, opt))
     return data

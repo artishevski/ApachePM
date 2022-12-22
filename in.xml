@@ -1,6 +1,6 @@
 <data>
 	<account>
-		<name>google1</name>
+		<name>Google1</name>
 		<website>google.com</website>
 		<login>l1</login>
 		<login>l2</login>
@@ -9,11 +9,22 @@
 		<opt2>opt2 info</opt2>
 	</account>
 	<account>
-		<name>google18</name>
+		<name>Google18</name>
 		<website>google.com</website>
 		<login>a</login>
 		<password>p</password>
 		<opt21>opt21 info</opt21>
 		<opt22>opt22 info</opt22>
-	</account>	
+	</account>
+	<account>
+		<name>Spotify</name>
+		<extra_info>logging via Facebook1</extra_info>
+		<website>spotify.com</website>
+	</account>
+	<account>
+		<name>Facebook1</name>
+		<website>facebook.com</website>
+		<login>+121654465</login>
+		<password>fshfjs</password>
+	</account>
 </data>

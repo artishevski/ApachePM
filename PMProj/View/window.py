@@ -39,7 +39,12 @@ class Window:
         name = Label(text=account.name, font=account_name_font)
         name.grid(row=i, column=1, sticky='w')
         self.account_data.append(name)
-        i = i + 2
+        i = i + 1
+        if account.extra_info is not None:
+            extra_info = Label(text='\t'+account.extra_info, font=font.Font(family= "Arial", size=10, slant='italic'))
+            extra_info.grid(row=i, column=1, sticky='w')
+            self.account_data.append(extra_info)
+        i=i+1
         label_font = font.Font(family= "Arial", size=11, weight='bold')
         website = Label(text='\tWebsite:', font=label_font)
         website.grid(row=i, column=1, sticky='w')
