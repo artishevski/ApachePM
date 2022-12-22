@@ -15,7 +15,7 @@ def readFromXml():
         for account_info in account:
             if account_info.tag == 'name':
                 name = account_info.text
-            if account_info.tag == 'extra_info':
+            elif account_info.tag == 'extra_info':
                 extra_info = account_info.text
             elif account_info.tag == 'website':
                 website = account_info.text
