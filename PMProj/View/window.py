@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import font
+from tkinter import font, messagebox
 
 
 class Window:
@@ -54,7 +54,7 @@ class Window:
             website.grid(row=i, column=j, sticky='w')
             self.account_data.append(website)
             website_data = Label(text='\t' + account.website, font=account_data_font)
-            website_data.grid(row=i, column=j+1, sticky='w')
+            website_data.grid(row=i, column=j + 1, sticky='w')
             self.account_data.append(website_data)
             i = i + 2
         if account.login:
@@ -63,7 +63,7 @@ class Window:
             self.account_data.append(login)
             for l in account.login:
                 login_data = Label(text='\t' + l, font=account_data_font)
-                login_data.grid(row=i, column=j+1, sticky='w')
+                login_data.grid(row=i, column=j + 1, sticky='w')
                 self.account_data.append(login_data)
                 i = i + 1
             i = i + 1
@@ -72,7 +72,7 @@ class Window:
             password.grid(row=i, column=j, sticky='w')
             self.account_data.append(password)
             password_data = Label(text='\t' + account.password, font=account_data_font)
-            password_data.grid(row=i, column=j+1, sticky='w')
+            password_data.grid(row=i, column=j + 1, sticky='w')
             self.account_data.append(password_data)
             i = i + 2
         for opt_key, opt_val in account.optional.items():
@@ -80,6 +80,23 @@ class Window:
             optional.grid(row=i, column=j, sticky='w')
             self.account_data.append(optional)
             optional_data = Label(text='\t' + opt_val, font=account_data_font)
-            optional_data.grid(row=i, column=j+1, sticky='w')
+            optional_data.grid(row=i, column=j + 1, sticky='w')
             self.account_data.append(optional_data)
             i = i + 1
+        edit_btn = Button(text='Edit', command=self.edit_account)
+        edit_btn.grid(row=21, column=j + 2, sticky='e')
+        self.account_data.append(edit_btn)
+        remove_btn = Button(text='Remove', command=lambda: self.remove_account(account))
+        remove_btn.grid(row=21, column=j + 3, sticky='e')
+        self.account_data.append(remove_btn)
+
+    def edit_account(self):
+        None
+
+    def remove_account(self, account):
+        if messagebox.askyesno(message="Are you sure that you want to delete account?"):
+            self.accounts_info.delete_account(account)
+            self.listbox.delete(self.listbox.get(0, END).index(account.name))
+            for it in self.account_data:
+                it.destroy()
+            self.account_data = []
