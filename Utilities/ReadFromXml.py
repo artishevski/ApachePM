@@ -10,8 +10,7 @@ def readFromXml():
     for account in root:
         login = []
         opt = dict()
-        name = website = password = ''
-        extra_info = None
+        name = website = password = extra_info = None
         for account_info in account:
             if account_info.tag == 'name':
                 name = account_info.text
