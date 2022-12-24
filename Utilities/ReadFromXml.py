@@ -6,8 +6,8 @@ from PMProj.Account import Account
 def readFromXml():
     tree = ET.parse('in.xml')
     root = tree.getroot()
-    data = list()
-    for account in root:
+    data = dict()
+    for ind, account in enumerate(root):
         login = []
         opt = dict()
         name = website = password = extra_info = None
@@ -24,5 +24,5 @@ def readFromXml():
                 password = account_info.text
             else:
                 opt.update({account_info.tag: account_info.text})
-        data.append(Account(name, extra_info, website, login, password, opt))
+        data.update({ind+1:Account(ind+1, name, extra_info, website, login, password, opt)})
     return data

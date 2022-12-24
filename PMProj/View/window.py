@@ -20,12 +20,16 @@ class Window:
         self.search.grid(column=0, row=0)
         self.listbox = Listbox(self.root, width=21, height=14, font=font.Font(family="Arial", size=20))
         self.listbox.grid(column=0, row=1, rowspan=20)
+        self.update_listbox()
         get_account_info = Button(text="get_account_info", command=self.get_account_info, height=1, width=19,
                                   font=font.Font(family="Arial", size=20))
         get_account_info.grid(row=21, column=0)
-        for values in self.accounts_info.accounts_list:
-            self.listbox.insert(END, values.name)
         self.root.mainloop()
+
+    def update_listbox(self):
+        self.listbox.delete(0, END)
+        for values in self.accounts_info.accounts_dict.values():
+            self.listbox.insert(END, values.name)
 
     def get_account_info(self):
         sel = self.listbox.curselection()
@@ -140,11 +144,11 @@ class Window:
             login_entry.insert(0, l)
             login_entry.grid(row=i, column=j + 1, sticky='w')
             logins.append(login_entry)
-            login_remove_btn = Button(text='Remove', command=partial(self.remove_login,(index + 1)*2))
+            login_remove_btn = Button(text='Remove', command=partial(self.remove_login,(index + 1)*2, account.id))
             login_remove_btn.grid(row=i, column=j + 2, sticky='w')
             logins.append(login_remove_btn)
             i = i + 1
-        login_add_new_btn = Button(text='Add new', command=self.add_new_login)
+        login_add_new_btn = Button(text='Add new', command=partial(self.add_new_login, account.id))
         login_add_new_btn.grid(row=i, column=j + 1, sticky='w')
         logins.append(login_add_new_btn)
         self.account_data.append(logins)
@@ -173,50 +177,60 @@ class Window:
             optional_data.insert(0, opt_val)
             optional_data.grid(row=i, column=j + 1, sticky='w')
             optional_info.append((optional_key, optional_data))
-            optional_remove_btn = Button(text='Remove', command=partial(self.remove_optional, index))
+            optional_remove_btn = Button(text='Remove', command=partial(self.remove_optional, index, account.id))
             optional_remove_btn.grid(row=i, column=j + 2, sticky='w')
             optionals.append(optional_remove_btn)
             i = i + 1
-        optional_add_new_btn = Button(text='Add new', command=self.add_new_optional)
+        optional_add_new_btn = Button(text='Add new', command=partial(self.add_new_optional, account.id))
         optional_add_new_btn.grid(row=i, column=j + 1, sticky='w')
         optionals.append(optional_add_new_btn)
         self.account_data.append(optional_info)
         self.account_data.append(optionals)
+        remove_btn = Button(text='Save', command=partial(self.save_edited_account, account.id))
+        remove_btn.grid(row=21, column=j + 4, sticky='e')
 
     def remove_account(self, account):
         if messagebox.askyesno(message="Are you sure that you want to delete account?"):
-            self.accounts_info.delete_account(account)
+            self.accounts_info.delete_account(account.id)
             self.listbox.delete(self.listbox.get(0, END).index(account.name))
             for it in self.account_data:
                 it.destroy()
             self.account_data.clear()
 
-    def remove_login(self, index):
+    def remove_login(self, index, id):
         self.account_data[6][index - 1].destroy()
         self.account_data[6][index].destroy()
         del self.account_data[6][index]
         del self.account_data[6][index - 1]
-        self.update_edited_window()
+        self.update_edited_window(id)
 
-    def add_new_login(self):
+    def add_new_login(self, id):
         self.account_data[6].insert(-1,Entry())
         self.account_data[6].insert(-1,Button())
-        self.update_edited_window()
+        self.update_edited_window(id)
 
-    def remove_optional(self, index):
+    def remove_optional(self, index, id):
         self.account_data[9][index][0].destroy()
         self.account_data[9][index][1].destroy()
         self.account_data[10][index+1].destroy()
         del self.account_data[9][index]
         del self.account_data[10][index+1]
-        self.update_edited_window()
+        self.update_edited_window(id)
 
-    def add_new_optional(self):
+    def add_new_optional(self, id):
         self.account_data[9].append((Entry(), Entry()))
         self.account_data[10].insert(-1,Button())
-        self.update_edited_window()
+        self.update_edited_window(id)
 
-    def update_edited_window(self):
+    def save_edited_account(self, id):
+        account = self.get_edited_account(id)
+        self.accounts_info.update_account(account)
+        self.update_listbox()
+
+    def update_edited_window(self, id):
+        self.edit_account(self.get_edited_account(id))
+
+    def get_edited_account(self, id):
         name = self.account_data[1].get()
         extra_info = self.account_data[3].get()
         website = self.account_data[5].get()
@@ -231,4 +245,4 @@ class Window:
         del self.account_data[10]
         del self.account_data[9]
         del self.account_data[6]
-        self.edit_account(Account(name, extra_info, website, login, password, optional))
+        return Account(id, name, extra_info, website, login, password, optional)
