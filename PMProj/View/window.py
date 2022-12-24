@@ -165,7 +165,7 @@ class Window:
         optional_label.grid(row=i, column=j, sticky='w')
         i = i + 1
         optionals.append(optional_label)
-        for opt_key, opt_val in account.optional.items():
+        for index, (opt_key, opt_val) in enumerate(account.optional.items()):
             optional_key = Entry(font=label_font)
             optional_key.insert(0, opt_key)
             optional_key.grid(row=i, column=j, sticky='w')
@@ -173,11 +173,11 @@ class Window:
             optional_data.insert(0, opt_val)
             optional_data.grid(row=i, column=j + 1, sticky='w')
             optional_info.append((optional_key, optional_data))
-            optional_remove_btn = Button(text='Remove')
+            optional_remove_btn = Button(text='Remove', command=partial(self.remove_optional, index))
             optional_remove_btn.grid(row=i, column=j + 2, sticky='w')
             optionals.append(optional_remove_btn)
             i = i + 1
-        optional_add_new_btn = Button(text='Add new')
+        optional_add_new_btn = Button(text='Add new', command=self.add_new_optional)
         optional_add_new_btn.grid(row=i, column=j + 1, sticky='w')
         optionals.append(optional_add_new_btn)
         self.account_data.append(optional_info)
@@ -192,7 +192,6 @@ class Window:
             self.account_data.clear()
 
     def remove_login(self, index):
-        print(index)
         self.account_data[6][index - 1].destroy()
         self.account_data[6][index].destroy()
         del self.account_data[6][index]
@@ -202,6 +201,19 @@ class Window:
     def add_new_login(self):
         self.account_data[6].insert(-1,Entry())
         self.account_data[6].insert(-1,Button())
+        self.update_edited_window()
+
+    def remove_optional(self, index):
+        self.account_data[9][index][0].destroy()
+        self.account_data[9][index][1].destroy()
+        self.account_data[10][index+1].destroy()
+        del self.account_data[9][index]
+        del self.account_data[10][index+1]
+        self.update_edited_window()
+
+    def add_new_optional(self):
+        self.account_data[9].append((Entry(), Entry()))
+        self.account_data[10].insert(-1,Button())
         self.update_edited_window()
 
     def update_edited_window(self):
@@ -214,7 +226,7 @@ class Window:
         password = self.account_data[8].get()
         optional = dict()
         for opt_key, opt_val in self.account_data[9]:
-            optional.update({opt_key.get(): opt_val.get()})
+            optional.update({opt_key.get() : opt_val.get()})
         self.account_data += self.account_data[6]+[item for t in self.account_data[9] for item in t] + self.account_data[10]
         del self.account_data[10]
         del self.account_data[9]
