@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import font, messagebox
 
+from PMProj.View.EditAccount.EditLogin import EditLogin
+
 
 class Window:
     def __init__(self, accounts_info):
@@ -33,6 +35,7 @@ class Window:
     def update(self, account):
         for it in self.account_data:
             it.destroy()
+        self.account_data.clear()
         # current row number
         i = 1
         # current column number
@@ -83,15 +86,102 @@ class Window:
             optional_data.grid(row=i, column=j + 1, sticky='w')
             self.account_data.append(optional_data)
             i = i + 1
-        edit_btn = Button(text='Edit', command=self.edit_account)
-        edit_btn.grid(row=21, column=j + 2, sticky='e')
+        edit_btn = Button(text='Edit', command=lambda: self.edit_account(account))
+        edit_btn.grid(row=21, column=j + 3, sticky='e')
         self.account_data.append(edit_btn)
         remove_btn = Button(text='Remove', command=lambda: self.remove_account(account))
-        remove_btn.grid(row=21, column=j + 3, sticky='e')
+        remove_btn.grid(row=21, column=j + 4, sticky='e')
         self.account_data.append(remove_btn)
 
-    def edit_account(self):
-        None
+    def edit_account(self, account):
+        for it in self.account_data:
+            it.destroy()
+        self.account_data.clear()
+        # current row number
+        i = 1
+        # current column number
+        j = 1
+        account_name_font = font.Font(family="Arial", size=20, weight='bold', underline=False)
+        name = Label(text='Account name: ', font=account_name_font)
+        name.grid(row=i, column=j, sticky='w')
+        self.account_data.append(name)
+        name_entry = Entry(font=account_name_font)
+        name_entry.insert(0, account.name)
+        name_entry.grid(row=i, column=j+1, sticky='w')
+        self.account_data.append(name_entry)
+        i = i + 1
+        extra_info = Label(text='\t' + 'Extra info:', font=font.Font(family="Arial", size=10))
+        extra_info.grid(row=i, column=j, sticky='w')
+        self.account_data.append(extra_info)
+        extra_info_entry = Entry(font=font.Font(family="Arial", size=10, slant='italic'))
+        extra_info_entry.insert(0, account.extra_info if account.extra_info else '')
+        extra_info_entry.grid(row=i, column=j+1, sticky='w')
+        self.account_data.append(extra_info_entry)
+        i = i + 1
+
+        label_font = font.Font(family="Arial", size=11, weight='bold')
+        account_data_font = font.Font(family="Arial", size=10)
+        website = Label(text='\tWebsite:', font=label_font)
+        website.grid(row=i, column=j, sticky='w')
+        self.account_data.append(website)
+        website_entry = Entry(font=account_data_font)
+        website_entry.insert(0, account.website if account.website else '')
+        website_entry.grid(row=i, column=j+1, sticky='w')
+        self.account_data.append(website_entry)
+        i = i + 2
+
+
+        logins=[]
+        login = Label(text='\tLogin:', font=label_font)
+        login.grid(row=i, column=j, sticky='w')
+        logins.append(login)
+        for l in account.login:
+            login_entry = Entry(font=account_data_font)
+            login_entry.insert(0, l)
+            login_entry.grid(row=i, column=j+1, sticky='w')
+            logins.append(login_entry)
+            login_remove_btn = Button(text='Remove')
+            login_remove_btn.grid(row=i, column=j+2, sticky='w')
+            logins.append(login_remove_btn)
+            i = i + 1
+        login_add_new_btn = Button(text='Add new')
+        login_add_new_btn.grid(row=i, column=j+1, sticky='w')
+        logins.append(login_add_new_btn)
+        self.account_data.append(logins)
+        i = i + 1
+
+        password = Label(text='\tPassword:', font=label_font)
+        password.grid(row=i, column=j, sticky='w')
+        self.account_data.append(password)
+        password_entry = Entry(font=account_data_font)
+        password_entry.insert(0, account.password if account.password else '')
+        password_entry.grid(row=i, column=j+1, sticky='w')
+        self.account_data.append(password_entry)
+        i = i + 2
+
+        optionals = []
+        optional_label = Label(text='\tOptional fields:', font=label_font)
+        optional_label.grid(row=i, column=j, sticky='w')
+        i = i + 1
+        optionals.append(optional_label)
+        for opt_key, opt_val in account.optional.items():
+            optional = Entry(font=label_font)
+            optional.insert(0, opt_key)
+            optional.grid(row=i, column=j, sticky='w')
+            optionals.append(optional)
+            optional_data = Entry(font=label_font)
+            optional_data.insert(0, opt_val)
+            optional_data.grid(row=i, column=j+1, sticky='w')
+            optionals.append(optional)
+            optional_remove_btn = Button(text='Remove')
+            optional_remove_btn.grid(row=i, column=j+2, sticky='w')
+            optionals.append(optional_remove_btn)
+            i = i + 1
+        optional_add_new_btn = Button(text='Add new')
+        optional_add_new_btn.grid(row=i, column=j+1, sticky='w')
+        optionals.append(optional_add_new_btn)
+        self.account_data.append(optionals)
+
 
     def remove_account(self, account):
         if messagebox.askyesno(message="Are you sure that you want to delete account?"):
@@ -99,4 +189,4 @@ class Window:
             self.listbox.delete(self.listbox.get(0, END).index(account.name))
             for it in self.account_data:
                 it.destroy()
-            self.account_data = []
+            self.account_data.clear()
