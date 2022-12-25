@@ -33,10 +33,8 @@ class Window:
             self.listbox.insert(END, values.name)
 
     def add_account(self):
-        sel = self.listbox.curselection()
-        string = self.listbox.get(sel[0])
-        account = self.accounts_info.find_account(string)
-        self.update(account)
+        new_account = self.accounts_info.add_account()
+        self.edit_account(new_account)
 
     def get_account_info(self, event):
         sel = self.listbox.curselection()
