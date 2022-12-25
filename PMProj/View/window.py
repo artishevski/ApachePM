@@ -22,9 +22,10 @@ class Window:
         self.listbox.bind("<<ListboxSelect>>", self.get_account_info)
         self.listbox.grid(column=0, row=1, rowspan=20)
         self.update_listbox()
-        get_account_info = Button(text="Add new account", command=self.add_account, height=1, width=19,
+        add_new_acc_btn = Button(text="Add new account", command=self.add_account, height=1, width=19,
                                   font=font.Font(family="Arial", size=20))
-        get_account_info.grid(row=21, column=0)
+        add_new_acc_btn.grid(row=21, column=0)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
 
     def update_listbox(self):
@@ -253,3 +254,8 @@ class Window:
         del self.account_data[9]
         del self.account_data[6]
         return Account(id, name, extra_info, website, login, password, optional)
+
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            self.accounts_info.writeToXml()
+            self.root.destroy()
