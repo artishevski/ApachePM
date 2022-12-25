@@ -19,9 +19,10 @@ class Window:
         self.search = Entry(width=35, font=font.Font(family="Arial", slant='italic', size=12))
         self.search.grid(column=0, row=0)
         self.listbox = Listbox(self.root, width=21, height=14, font=font.Font(family="Arial", size=20))
+        self.listbox.bind("<<ListboxSelect>>", self.get_account_info)
         self.listbox.grid(column=0, row=1, rowspan=20)
         self.update_listbox()
-        get_account_info = Button(text="get_account_info", command=self.get_account_info, height=1, width=19,
+        get_account_info = Button(text="Add new account", command=self.add_account, height=1, width=19,
                                   font=font.Font(family="Arial", size=20))
         get_account_info.grid(row=21, column=0)
         self.root.mainloop()
@@ -31,16 +32,20 @@ class Window:
         for values in self.accounts_info.accounts_dict.values():
             self.listbox.insert(END, values.name)
 
-    def get_account_info(self):
+    def add_account(self):
+        sel = self.listbox.curselection()
+        string = self.listbox.get(sel[0])
+        account = self.accounts_info.find_account(string)
+        self.update(account)
+
+    def get_account_info(self, event):
         sel = self.listbox.curselection()
         string = self.listbox.get(sel[0])
         account = self.accounts_info.find_account(string)
         self.update(account)
 
     def update(self, account):
-        for it in self.account_data:
-            it.destroy()
-        self.account_data.clear()
+        self.destroy_ui_items()
         # current row number
         i = 1
         # current column number
@@ -99,9 +104,7 @@ class Window:
         self.account_data.append(remove_btn)
 
     def edit_account(self, account):
-        for it in self.account_data:
-            it.destroy()
-        self.account_data.clear()
+        self.destroy_ui_items()
         # current row number
         i = 1
         # current column number
@@ -189,6 +192,11 @@ class Window:
         remove_btn = Button(text='Save', command=partial(self.save_edited_account, account.id))
         remove_btn.grid(row=21, column=j + 4, sticky='e')
 
+    def destroy_ui_items(self):
+        for it in self.account_data:
+            it.destroy()
+        self.account_data.clear()
+
     def remove_account(self, account):
         if messagebox.askyesno(message="Are you sure that you want to delete account?"):
             self.accounts_info.delete_account(account.id)
@@ -226,6 +234,7 @@ class Window:
         account = self.get_edited_account(id)
         self.accounts_info.update_account(account)
         self.update_listbox()
+        self.update(account)
 
     def update_edited_window(self, id):
         self.edit_account(self.get_edited_account(id))
