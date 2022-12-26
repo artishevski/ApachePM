@@ -1,3 +1,5 @@
+import os
+
 from PMProj.Account import Account
 import xml.etree.ElementTree as ET
 
@@ -26,6 +28,8 @@ class AccountsInfo:
                 return account
 
     def readFromXml(self):
+        if not os.path.isfile('in.xml'):
+            return dict()
         tree = ET.parse('in.xml')
         root = tree.getroot()
         data = dict()

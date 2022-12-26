@@ -16,7 +16,9 @@ class Window:
         self.root.geometry("950x545")
         self.account_data = []
         self.accounts_info = accounts_info
-        self.search = Entry(width=35, font=font.Font(family="Arial", slant='italic', size=12))
+        self.var = StringVar()
+        self.var.trace("w", self.search_account)
+        self.search = Entry(width=35, font=font.Font(family="Arial", slant='italic', size=12), textvariable=self.var)
         self.search.grid(column=0, row=0)
         self.listbox = Listbox(self.root, width=21, height=14, font=font.Font(family="Arial", size=20))
         self.listbox.bind("<<ListboxSelect>>", self.get_account_info)
@@ -27,6 +29,12 @@ class Window:
         add_new_acc_btn.grid(row=21, column=0)
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
+
+    def search_account(self, *args):
+        self.listbox.delete(0, END)
+        for acc in self.accounts_info.accounts_dict.values():
+            if self.var.get().lower() in acc.name.lower():
+                self.listbox.insert(END, acc.name)
 
     def update_listbox(self):
         self.listbox.delete(0, END)
