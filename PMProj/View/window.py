@@ -33,7 +33,7 @@ class Window:
     def search_account(self, *args):
         self.listbox.delete(0, END)
         for acc in self.accounts_info.accounts_dict.values():
-            if self.var.get().lower() in acc.name.lower():
+            if acc.name and self.var.get().lower() in acc.name.lower():
                 self.listbox.insert(END, acc.name)
 
     def update_listbox(self):
