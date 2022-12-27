@@ -49,7 +49,7 @@ class AccountsInfo:
                 elif account_info.tag == 'password':
                     password = account_info.text
                 else:
-                    opt.update({account_info.tag: account_info.text})
+                    opt.update({account_info.tag.replace('_', ' '): account_info.text})
             data.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
         return data
 
@@ -73,6 +73,6 @@ class AccountsInfo:
                 password = ET.SubElement(account, 'password')
                 password.text = acc.password
             for key, val in acc.optional.items():
-                opt_key = ET.SubElement(account, key)
+                opt_key = ET.SubElement(account, key.replace(' ', '_'))
                 opt_key.text = val
         ET.ElementTree(data).write("in.xml")
