@@ -50,7 +50,8 @@ class AccountsInfo:
                     password = account_info.text
                 else:
                     opt.update({account_info.tag.replace('_', ' '): account_info.text})
-            data.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
+            if name:
+                data.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
         return data
 
     def writeToXml(self):

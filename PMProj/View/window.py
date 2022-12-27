@@ -38,7 +38,7 @@ class Window:
 
     def update_listbox(self):
         self.listbox.delete(0, END)
-        for values in self.accounts_info.accounts_dict.values():
+        for values in sorted(self.accounts_info.accounts_dict.values(), key=lambda acc: acc.name.lower()):
             self.listbox.insert(END, values.name)
 
     def add_account(self):
