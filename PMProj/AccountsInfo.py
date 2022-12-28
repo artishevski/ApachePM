@@ -20,6 +20,12 @@ class AccountsInfo:
     def update_account(self, account):
         self.accounts_dict.update({account.id: account})
 
+    def is_name_available(self, name, id):
+        for acc in self.accounts_dict.values():
+            if acc.name.lower() == name.lower() and acc.id != id:
+                return False
+        return True
+
     def add_account(self):
         for i in range(1000):
             if not self.accounts_dict.__contains__(i):

@@ -247,9 +247,12 @@ class Window:
 
     def save_edited_account(self, id):
         account = self.get_edited_account(id)
-        self.accounts_info.update_account(account)
-        self.update_listbox()
-        self.update(account)
+        if self.accounts_info.is_name_available(account.name, id):
+            self.accounts_info.update_account(account)
+            self.update_listbox()
+            self.update(account)
+        else:
+            messagebox.showerror(message=f'Account with a name \'{account.name}\' already exists')
 
     def update_edited_window(self, id):
         self.edit_account(self.get_edited_account(id))
