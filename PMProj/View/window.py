@@ -207,7 +207,11 @@ class Window:
                     val.destroy()
             elif str(type(it)) == '<class \'list\'>':
                 for l in it:
-                    l.destroy()
+                    if str(type(l)) == '<class \'tuple\'>':
+                        l[0].destroy()
+                        l[1].destroy()
+                    else:
+                        l.destroy()
             else:
                 it.destroy()
         self.account_data.clear()
