@@ -25,7 +25,7 @@ class Window:
         self.listbox.grid(column=0, row=1, rowspan=20)
         self.update_listbox()
         add_new_acc_btn = Button(text="Add new account", command=self.add_account, height=1, width=19,
-                                  font=font.Font(family="Arial", size=20))
+                                 font=font.Font(family="Arial", size=20))
         add_new_acc_btn.grid(row=21, column=0)
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.root.mainloop()
@@ -154,7 +154,7 @@ class Window:
             login_entry.insert(0, l)
             login_entry.grid(row=i, column=j + 1, sticky='w')
             logins.append(login_entry)
-            login_remove_btn = Button(text='Remove', command=partial(self.remove_login,(index + 1)*2, account.id))
+            login_remove_btn = Button(text='Remove', command=partial(self.remove_login, (index + 1) * 2, account.id))
             login_remove_btn.grid(row=i, column=j + 2, sticky='w')
             logins.append(login_remove_btn)
             i = i + 1
@@ -201,7 +201,15 @@ class Window:
 
     def destroy_ui_items(self):
         for it in self.account_data:
-            it.destroy()
+            if str(type(it)) == '<class \'dict\'>':
+                for key, val in it:
+                    key.destroy()
+                    val.destroy()
+            elif str(type(it)) == '<class \'list\'>':
+                for l in it:
+                    l.destroy()
+            else:
+                it.destroy()
         self.account_data.clear()
 
     def remove_account(self, account):
@@ -220,21 +228,21 @@ class Window:
         self.update_edited_window(id)
 
     def add_new_login(self, id):
-        self.account_data[6].insert(-1,Entry())
-        self.account_data[6].insert(-1,Button())
+        self.account_data[6].insert(-1, Entry())
+        self.account_data[6].insert(-1, Button())
         self.update_edited_window(id)
 
     def remove_optional(self, index, id):
         self.account_data[9][index][0].destroy()
         self.account_data[9][index][1].destroy()
-        self.account_data[10][index+1].destroy()
+        self.account_data[10][index + 1].destroy()
         del self.account_data[9][index]
-        del self.account_data[10][index+1]
+        del self.account_data[10][index + 1]
         self.update_edited_window(id)
 
     def add_new_optional(self, id):
         self.account_data[9].append((Entry(), Entry()))
-        self.account_data[10].insert(-1,Button())
+        self.account_data[10].insert(-1, Button())
         self.update_edited_window(id)
 
     def save_edited_account(self, id):
@@ -256,11 +264,7 @@ class Window:
         password = self.account_data[8].get()
         optional = dict()
         for opt_key, opt_val in self.account_data[9]:
-            optional.update({opt_key.get() : opt_val.get()})
-        self.account_data += self.account_data[6]+[item for t in self.account_data[9] for item in t] + self.account_data[10]
-        del self.account_data[10]
-        del self.account_data[9]
-        del self.account_data[6]
+            optional.update({opt_key.get(): opt_val.get()})
         return Account(id, name, extra_info, website, login, password, optional)
 
     def on_closing(self):
