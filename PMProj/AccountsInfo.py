@@ -1,5 +1,6 @@
 import os
 
+from Encryption.ViginereExtended import ViginereExtended
 from PMProj.Account import Account
 import xml.etree.ElementTree as ET
 
@@ -34,6 +35,7 @@ class AccountsInfo:
                 return account
 
     def readFromXml(self):
+        decoder = ViginereExtended("2404")
         if not os.path.isfile('in.xml'):
             return dict()
         tree = ET.parse('in.xml')
@@ -45,41 +47,42 @@ class AccountsInfo:
             name = website = password = extra_info = None
             for account_info in account:
                 if account_info.tag == 'name':
-                    name = account_info.text
+                    name = decoder.decode(account_info.text)
                 elif account_info.tag == 'extra_info':
-                    extra_info = account_info.text
+                    extra_info = decoder.decode(account_info.text)
                 elif account_info.tag == 'website':
-                    website = account_info.text
+                    website = decoder.decode(account_info.text)
                 elif account_info.tag == 'login':
-                    login.append(account_info.text)
+                    login.append(decoder.decode(account_info.text))
                 elif account_info.tag == 'password':
-                    password = account_info.text
+                    password = decoder.decode(account_info.text)
                 else:
-                    opt.update({account_info.tag.replace('_', ' '): account_info.text})
+                    opt.update({decoder.decode(account_info.tag.replace('_', ' ')): decoder.decode(account_info.text)})
             if name:
                 data.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
         return data
 
     def writeToXml(self):
+        encoder = ViginereExtended("2404")
         data=ET.Element('data')
         for acc in self.accounts_dict.values():
             account = ET.SubElement(data, 'account')
             if acc.name:
                 name = ET.SubElement(account, 'name')
-                name.text = acc.name
+                name.text = encoder.encode(acc.name)
             if acc.extra_info:
                 extra_info = ET.SubElement(account, 'extra_info')
-                extra_info.text = acc.extra_info
+                extra_info.text = encoder.encode(acc.extra_info)
             if acc.website:
                 website = ET.SubElement(account, 'website')
-                website.text = acc.website
+                website.text = encoder.encode(acc.website)
             for l in acc.login:
                 login = ET.SubElement(account, 'login')
-                login.text = l
+                login.text = encoder.encode(l)
             if acc.password:
                 password = ET.SubElement(account, 'password')
-                password.text = acc.password
+                password.text = encoder.encode(acc.password)
             for key, val in acc.optional.items():
-                opt_key = ET.SubElement(account, key.replace(' ', '_'))
-                opt_key.text = val
+                opt_key = ET.SubElement(account, encoder.encode(key.replace(' ', '_')))
+                opt_key.text = encoder.encode(val)
         ET.ElementTree(data).write("in.xml")
