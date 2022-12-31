@@ -6,8 +6,10 @@ import xml.etree.ElementTree as ET
 
 
 class AccountsInfo:
-    def __init__(self):
-        self.accounts_dict = self.readFromXml()
+    def __init__(self, e1, e2):
+        self.accounts_dict = dict()
+        self.encrypt_code = e1 if e1 else '0'
+        self.decrypt_code = e2 if e2 else '0'
 
     def delete_account(self, id):
         del self.accounts_dict[id]
@@ -35,12 +37,11 @@ class AccountsInfo:
                 return account
 
     def readFromXml(self):
-        decoder = ViginereExtended("2404")
+        decoder = ViginereExtended(self.encrypt_code)
         if not os.path.isfile('in.xml'):
             return dict()
         tree = ET.parse('in.xml')
         root = tree.getroot()
-        data = dict()
         for ind, account in enumerate(root):
             login = []
             opt = dict()
@@ -59,11 +60,10 @@ class AccountsInfo:
                 else:
                     opt.update({decoder.decode(account_info.tag.replace('_', ' ')): decoder.decode(account_info.text)})
             if name:
-                data.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
-        return data
+                self.accounts_dict.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
 
     def writeToXml(self):
-        encoder = ViginereExtended("2404")
+        encoder = ViginereExtended(self.decrypt_code)
         data=ET.Element('data')
         for acc in self.accounts_dict.values():
             account = ET.SubElement(data, 'account')

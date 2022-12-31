@@ -1,21 +1,44 @@
 from functools import partial
 from tkinter import *
 from tkinter import font, messagebox
+from tkinter.simpledialog import askstring
 
 from PMProj.Account import Account
+from PMProj.AccountsInfo import AccountsInfo
 
 
 class Window:
-    def __init__(self, accounts_info):
+    def __init__(self):
         self.root = Tk()
         self.root.title('BulbaPM')
         # self.root.rowconfigure(0, pad=1)
         # self.root.rowconfigure(1, pad=1)
         self.root.columnconfigure(0, pad=20)
         self.root.columnconfigure(1)
+        self.root.geometry("400x180")
+        f1 = font.Font(family="Arial", size=12, weight='bold')
+        f2 = font.Font(family="Arial", size=12)
+        l1 = Label(text='Enter encryption code:', font=f1)
+        l1.grid(column=0, row=0)
+        en1 = Entry(font=f2)
+        en1.grid(column=1, row=0)
+        l2 = Label(text='Enter decryption code:', font=f1)
+        l2.grid(column=0, row=1)
+        en2 = Entry(font=f2)
+        en2.grid(column=1, row=1)
+        b = Button(text="Enter", command=lambda: self.get_codes(en1.get(), en2.get()), font=f1)
+        b.grid(column=1, row=2)
+        self.account_data = [l1, l2, en1, en2, b]
+        self.root.mainloop()
+
+    def get_codes(self, e1, e2):
+        self.accounts_info = AccountsInfo(e1, e2)
+        self.destroy_ui_items()
+        self.load_page()
+
+    def load_page(self):
         self.root.geometry("950x545")
-        self.account_data = []
-        self.accounts_info = accounts_info
+        self.accounts_info.readFromXml()
         self.var = StringVar()
         self.var.trace("w", self.search_account)
         self.search = Entry(width=35, font=font.Font(family="Arial", slant='italic', size=12), textvariable=self.var)
@@ -28,7 +51,6 @@ class Window:
                                  font=font.Font(family="Arial", size=20))
         add_new_acc_btn.grid(row=21, column=0)
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        self.root.mainloop()
 
     def search_account(self, *args):
         self.listbox.delete(0, END)
@@ -48,6 +70,7 @@ class Window:
     def get_account_info(self, event):
         sel = self.listbox.curselection()
         string = self.listbox.get(sel[0])
+        print(string)
         account = self.accounts_info.find_account(string)
         self.update(account)
 

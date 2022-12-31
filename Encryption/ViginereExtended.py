@@ -1,6 +1,6 @@
 class ViginereExtended:
     def __init__(self, code):
-        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890абвгдеёжзийклмнопрстуфхцчшщъыьэюяФБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ()!@#$%^&*/?№;:-_+-.,<>`~ '
+        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890абвгдеёжзийклмнопрстуфхцчшщъыьэюяФБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ()!@#$%^&*?№;:-+-.,`~ '
         self.alphabet_length = len(self.alphabet)
         self.code = list(code)
         self.code_length = len(self.code)
