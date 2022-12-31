@@ -70,7 +70,6 @@ class Window:
     def get_account_info(self, event):
         sel = self.listbox.curselection()
         string = self.listbox.get(sel[0])
-        print(string)
         account = self.accounts_info.find_account(string)
         self.update(account)
 

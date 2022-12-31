@@ -58,14 +58,14 @@ class AccountsInfo:
                 elif account_info.tag == 'password':
                     password = decoder.decode(account_info.text)
                 else:
-                    opt.update({decoder.decode(account_info.tag.replace('_', ' ')): decoder.decode(account_info.text)})
+                    opt.update({decoder.decode(account_info.tag[1:]): decoder.decode(account_info.text)})
             if name:
                 self.accounts_dict.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
 
     def writeToXml(self):
         encoder = ViginereExtended(self.decrypt_code)
         data=ET.Element('data')
-        for acc in self.accounts_dict.values():
+        for acc in sorted(self.accounts_dict.values(), key=lambda it: it.name.lower()):
             account = ET.SubElement(data, 'account')
             if acc.name:
                 name = ET.SubElement(account, 'name')
@@ -83,6 +83,6 @@ class AccountsInfo:
                 password = ET.SubElement(account, 'password')
                 password.text = encoder.encode(acc.password)
             for key, val in acc.optional.items():
-                opt_key = ET.SubElement(account, encoder.encode(key.replace(' ', '_')))
+                opt_key = ET.SubElement(account, 'a' + encoder.encode(key))
                 opt_key.text = encoder.encode(val)
         ET.ElementTree(data).write("in.xml")

@@ -1,6 +1,6 @@
 class ViginereExtended:
     def __init__(self, code):
-        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890абвгдеёжзийклмнопрстуфхцчшщъыьэюяФБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ()!@#$%^&*?№;:-+-.,`~ '
+        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890абвгдеёжзийклмнопрстуфхцчшщъыьэюяФБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ()!@#$%^&*?№;:-+-.,`~\'_'
         self.alphabet_length = len(self.alphabet)
         self.code = list(code)
         self.code_length = len(self.code)
@@ -13,7 +13,7 @@ class ViginereExtended:
             symb_index = (symb_index + int(self.code[self.current_index])) % self.alphabet_length
             encrypted_text += self.alphabet[symb_index]
             self.current_index = (self.current_index + 1) % self.code_length
-        return encrypted_text
+        return encrypted_text.replace(' ', '_')
 
     def decode(self, text):
         decrypted_text = ''
@@ -22,4 +22,4 @@ class ViginereExtended:
             symb_index = (symb_index + self.alphabet_length - int(self.code[self.current_index])) % self.alphabet_length
             decrypted_text += self.alphabet[symb_index]
             self.current_index = (self.current_index + 1) % self.code_length
-        return decrypted_text
+        return decrypted_text.replace('_', ' ')
