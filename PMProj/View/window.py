@@ -15,20 +15,25 @@ class Window:
         # self.root.rowconfigure(1, pad=1)
         self.root.columnconfigure(0, pad=20)
         self.root.columnconfigure(1)
-        self.root.geometry("400x180")
-        f1 = font.Font(family="Arial", size=12, weight='bold')
-        f2 = font.Font(family="Arial", size=12)
-        l1 = Label(text='Enter encryption code:', font=f1)
-        l1.grid(column=0, row=0)
-        en1 = Entry(font=f2)
-        en1.grid(column=1, row=0)
-        l2 = Label(text='Enter decryption code:', font=f1)
-        l2.grid(column=0, row=1)
-        en2 = Entry(font=f2)
-        en2.grid(column=1, row=1)
-        b = Button(text="Enter", command=lambda: self.get_codes(en1.get(), en2.get()), font=f1)
-        b.grid(column=1, row=2)
-        self.account_data = [l1, l2, en1, en2, b]
+
+        #self.root.geometry("400x180")
+        #f1 = font.Font(family="Arial", size=12, weight='bold')
+        #f2 = font.Font(family="Arial", size=12)
+        #l1 = Label(text='Enter encryption code:', font=f1)
+        #l1.grid(column=0, row=0)
+        #en1 = Entry(font=f2)
+        #en1.grid(column=1, row=0)
+        #l2 = Label(text='Enter decryption code:', font=f1)
+        #l2.grid(column=0, row=1)
+        #en2 = Entry(font=f2)
+        #en2.grid(column=1, row=1)
+        #b = Button(text="Enter", command=lambda: self.get_codes(en1.get(), en2.get()), font=f1)
+        #b.grid(column=1, row=2)
+        #self.account_data = [l1, l2, en1, en2, b]
+
+        self.accounts_info = AccountsInfo()
+        self.account_data = []
+        self.load_page()
         self.root.mainloop()
 
     def get_codes(self, e1, e2):

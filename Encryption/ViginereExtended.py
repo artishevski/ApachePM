@@ -7,6 +7,7 @@ class ViginereExtended:
         self.current_index = 0
 
     def encode(self, text):
+        return text.replace(' ', '_')
         encrypted_text = ''
         for symb in text:
             symb_index = self.alphabet.find(symb)
@@ -16,6 +17,7 @@ class ViginereExtended:
         return encrypted_text.replace(' ', '_')
 
     def decode(self, text):
+        return text.replace('_', ' ')
         decrypted_text = ''
         for symb in text:
             symb_index = self.alphabet.find(symb)

@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 
 
 class AccountsInfo:
-    def __init__(self, e1, e2):
+    def __init__(self, e1 = None, e2 = None):
         self.accounts_dict = dict()
         self.encrypt_code = e1 if e1 else '0'
         self.decrypt_code = e2 if e2 else '0'
