@@ -10,7 +10,7 @@ from PMProj.AccountsInfo import AccountsInfo
 class Window:
     def __init__(self):
         self.root = Tk()
-        self.root.title('BulbaPM')
+        self.root.title('ApachePM')
         # self.root.rowconfigure(0, pad=1)
         # self.root.rowconfigure(1, pad=1)
         self.root.columnconfigure(0, pad=20)

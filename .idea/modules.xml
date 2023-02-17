@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BulbaPM.iml" filepath="$PROJECT_DIR$/.idea/BulbaPM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ApachePM.iml" filepath="$PROJECT_DIR$/.idea/ApachePM.iml" />
     </modules>
   </component>
 </project>
