@@ -1,8 +1,9 @@
 class Account:
 
-    def __init__(self, id, name = '', extra_info='', website='', login=list(), password='', optional=dict()):
+    def __init__(self, id, name = '', starred = False, extra_info='', website='', login=list(), password='', optional=dict()):
         self.id = id
         self.name = name
+        self.starred = starred
         self.extra_info = extra_info
         self.website = website
         self.login = login

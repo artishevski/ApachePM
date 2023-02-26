@@ -10,6 +10,11 @@ from PMProj.AccountsInfo import AccountsInfo
 class Window:
     def __init__(self):
         self.root = Tk()
+        self.menu = Menu(self.root)
+        base_menu = Menu(self.menu, tearoff=0)
+        base_menu.add_command(label='Show only starred accounts', command=self.show_only_starred_accounts)
+        self.menu.add_cascade(label = 'Menu', menu = base_menu)
+        self.root.config(menu=self.menu)
         self.root.title('ApachePM')
         # self.root.rowconfigure(0, pad=1)
         # self.root.rowconfigure(1, pad=1)
@@ -33,6 +38,7 @@ class Window:
 
         self.accounts_info = AccountsInfo()
         self.account_data = []
+        self.show_only_starred = False
         self.load_page()
         self.root.mainloop()
 
@@ -65,8 +71,12 @@ class Window:
 
     def update_listbox(self):
         self.listbox.delete(0, END)
-        for values in sorted(self.accounts_info.accounts_dict.values(), key=lambda acc: acc.name.lower()):
-            self.listbox.insert(END, values.name)
+        if self.show_only_starred:
+            for values in sorted([it for it in self.accounts_info.accounts_dict.values() if it.starred], key=lambda acc: acc.name.lower()):
+                self.listbox.insert(END, values.name)
+        else:
+            for values in sorted(self.accounts_info.accounts_dict.values(), key=lambda acc: acc.name.lower()):
+                self.listbox.insert(END, values.name)
 
     def add_account(self):
         new_account = self.accounts_info.add_account()
@@ -130,12 +140,24 @@ class Window:
             optional_data.grid(row=i, column=j + 1, sticky='w')
             self.account_data.append(optional_data)
             i = i + 1
+        starred_btn = Button(text='★' if account.starred else '☆', command=lambda: self.mark_starred(account),
+                             font=font.Font(family="Arial", size=20, weight='bold'))
+        starred_btn.grid(row=1, column=j+5, sticky='e')
+        self.account_data.append(starred_btn)
         edit_btn = Button(text='Edit', command=lambda: self.edit_account(account))
         edit_btn.grid(row=21, column=j + 3, sticky='e')
         self.account_data.append(edit_btn)
         remove_btn = Button(text='Remove', command=lambda: self.remove_account(account))
         remove_btn.grid(row=21, column=j + 4, sticky='e')
         self.account_data.append(remove_btn)
+
+    def show_only_starred_accounts(self):
+        self.show_only_starred = False if self.show_only_starred else True
+        self.update_listbox()
+
+    def mark_starred(self, account):
+        account.starred = False if account.starred else True
+        self.update(account)
 
     def edit_account(self, account):
         self.destroy_ui_items()
@@ -290,6 +312,7 @@ class Window:
 
     def get_edited_account(self, id):
         name = self.account_data[1].get()
+        starred = True
         extra_info = self.account_data[3].get()
         website = self.account_data[5].get()
         login = []
@@ -299,7 +322,7 @@ class Window:
         optional = dict()
         for opt_key, opt_val in self.account_data[9]:
             optional.update({opt_key.get(): opt_val.get()})
-        return Account(id, name, extra_info, website, login, password, optional)
+        return Account(id, name, starred, extra_info, website, login, password, optional)
 
     def on_closing(self):
         if messagebox.askokcancel("Quit", "Do you want to quit?"):

@@ -46,9 +46,12 @@ class AccountsInfo:
             login = []
             opt = dict()
             name = website = password = extra_info = None
+            stared = False
             for account_info in account:
                 if account_info.tag == 'name':
                     name = decoder.decode(account_info.text)
+                elif account_info.tag == 'starred':
+                    stared = True if (decoder.decode(account_info.text) == '1') else False
                 elif account_info.tag == 'extra_info':
                     extra_info = decoder.decode(account_info.text)
                 elif account_info.tag == 'website':
@@ -60,7 +63,7 @@ class AccountsInfo:
                 else:
                     opt.update({decoder.decode(account_info.tag[1:]): decoder.decode(account_info.text)})
             if name:
-                self.accounts_dict.update({ind + 1: Account(ind + 1, name, extra_info, website, login, password, opt)})
+                self.accounts_dict.update({ind + 1: Account(ind + 1, name, stared, extra_info, website, login, password, opt)})
 
     def writeToXml(self):
         encoder = ViginereExtended(self.decrypt_code)
@@ -70,6 +73,10 @@ class AccountsInfo:
             if acc.name:
                 name = ET.SubElement(account, 'name')
                 name.text = encoder.encode(acc.name)
+            if acc.starred:
+                stared = ET.SubElement(account, 'starred')
+                star = '1'# if acc.starred else '0'
+                stared.text = encoder.encode(star)
             if acc.extra_info:
                 extra_info = ET.SubElement(account, 'extra_info')
                 extra_info.text = encoder.encode(acc.extra_info)
